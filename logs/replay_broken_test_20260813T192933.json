@@ -1,0 +1,135 @@
+{
+  "result": {
+    "success": false,
+    "artifact_name": "broken_test",
+    "steps_executed": 7,
+    "total_steps": 9,
+    "checkpoint_verified": false,
+    "outputs": {},
+    "error": {
+      "category": "hard_failure",
+      "message": "Step 8 (click) failed after 3 attempt(s): Locator.wait_for: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"#this-button-does-not-exist\").first to be visible\n",
+      "step_number": 8,
+      "details": {
+        "action": "click",
+        "description": "Click Add to cart"
+      }
+    },
+    "duration_seconds": 32.88
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-13T19:29:00.700546",
+      "event": "run_start",
+      "artifact_name": "broken_test",
+      "target_app": "https://www.saucedemo.com"
+    },
+    {
+      "timestamp": "2026-08-13T19:29:01.744899",
+      "event": "step_success",
+      "step_number": 1,
+      "action": "navigate",
+      "description": "Navigate to Saucedemo",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T19:29:01.831170",
+      "event": "step_success",
+      "step_number": 2,
+      "action": "click",
+      "description": "Click username field",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T19:29:01.840128",
+      "event": "step_success",
+      "step_number": 3,
+      "action": "type",
+      "description": "Type username",
+      "attempt": 1,
+      "text_input": "standard_user"
+    },
+    {
+      "timestamp": "2026-08-13T19:29:01.906152",
+      "event": "step_success",
+      "step_number": 4,
+      "action": "click",
+      "description": "Click password field",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T19:29:01.909647",
+      "event": "step_success",
+      "step_number": 5,
+      "action": "type",
+      "description": "Type password",
+      "attempt": 1,
+      "text_input": "***REDACTED***"
+    },
+    {
+      "timestamp": "2026-08-13T19:29:01.965334",
+      "event": "step_success",
+      "step_number": 6,
+      "action": "click",
+      "description": "Click login button",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T19:29:02.006413",
+      "event": "step_success",
+      "step_number": 7,
+      "action": "click",
+      "description": "Click Fleece Jacket",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T19:29:12.016815",
+      "event": "step_error",
+      "step_number": 8,
+      "action": "click",
+      "attempt": 1,
+      "category": "recoverable",
+      "error": "Locator.wait_for: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"#this-button-does-not-exist\").first to be visible\n"
+    },
+    {
+      "timestamp": "2026-08-13T19:29:22.524002",
+      "event": "step_error",
+      "step_number": 8,
+      "action": "click",
+      "attempt": 2,
+      "category": "recoverable",
+      "error": "Locator.wait_for: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"#this-button-does-not-exist\").first to be visible\n"
+    },
+    {
+      "timestamp": "2026-08-13T19:29:33.532836",
+      "event": "step_error",
+      "step_number": 8,
+      "action": "click",
+      "attempt": 3,
+      "category": "recoverable",
+      "error": "Locator.wait_for: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"#this-button-does-not-exist\").first to be visible\n"
+    },
+    {
+      "timestamp": "2026-08-13T19:29:33.533019",
+      "event": "run_failed",
+      "category": "hard_failure",
+      "message": "Step 8 (click) failed after 3 attempt(s): Locator.wait_for: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator(\"#this-button-does-not-exist\").first to be visible\n",
+      "step_number": 8,
+      "details": {
+        "action": "click",
+        "description": "Click Add to cart"
+      }
+    },
+    {
+      "timestamp": "2026-08-13T19:29:33.581968",
+      "event": "run_end",
+      "success": false,
+      "duration_seconds": 32.88
+    }
+  ]
+}

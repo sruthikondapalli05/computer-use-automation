@@ -1,0 +1,125 @@
+{
+  "version": "1.0",
+  "name": "login_and_add_expensive_item",
+  "description": "Login to Saucedemo, find most expensive item (Fleece Jacket $49.99), add to cart",
+  "target_app": "https://www.saucedemo.com",
+  "inputs": {
+    "username": "standard_user",
+    "password": "secret_sauce"
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "action": "navigate",
+      "locator": null,
+      "text_input": null,
+      "description": "Navigate to Saucedemo"
+    },
+    {
+      "step_number": 2,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "user-name",
+        "robustness_reason": "ID stable"
+      },
+      "text_input": null,
+      "description": "Click username field"
+    },
+    {
+      "step_number": 3,
+      "action": "type",
+      "locator": {
+        "strategy": "id",
+        "value": "user-name",
+        "robustness_reason": "ID stable"
+      },
+      "text_input": "standard_user",
+      "description": "Type username"
+    },
+    {
+      "step_number": 4,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "password",
+        "robustness_reason": "ID stable"
+      },
+      "text_input": null,
+      "description": "Click password field"
+    },
+    {
+      "step_number": 5,
+      "action": "type",
+      "locator": {
+        "strategy": "id",
+        "value": "password",
+        "robustness_reason": "ID stable"
+      },
+      "text_input": "secret_sauce",
+      "description": "Type password"
+    },
+    {
+      "step_number": 6,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "login-button",
+        "robustness_reason": "ID stable"
+      },
+      "text_input": null,
+      "description": "Click login button"
+    },
+    {
+      "step_number": 7,
+      "action": "click",
+      "locator": {
+        "strategy": "text",
+        "value": "Sauce Labs Fleece Jacket",
+        "robustness_reason": "Product name stable"
+      },
+      "text_input": null,
+      "description": "Click Fleece Jacket"
+    },
+    {
+      "step_number": 8,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "add-to-cart",
+        "robustness_reason": "Button ID stable"
+      },
+      "text_input": null,
+      "description": "Click Add to cart"
+    },
+    {
+      "step_number": 9,
+      "action": "click",
+      "locator": {
+        "strategy": "class",
+        "value": "shopping_cart_link",
+        "robustness_reason": "Cart icon stable"
+      },
+      "text_input": null,
+      "description": "Click cart icon"
+    }
+  ],
+  "checkpoint": {
+    "element_locator": {
+      "strategy": "class",
+      "value": "cart_quantity",
+      "robustness_reason": "Cart qty stable"
+    },
+    "expected_content": "1",
+    "description": "Verify 1 item in cart"
+  },
+  "outputs": {
+    "item_added": "true",
+    "item_name": "Sauce Labs Fleece Jacket",
+    "item_price": "$49.99",
+    "cart_item_count": "1"
+  },
+  "created_at": "2026-08-13T19:25:58.660623",
+  "created_by": "ai_discovery_run",
+  "estimated_duration_seconds": 25
+}

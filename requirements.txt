@@ -1,0 +1,5 @@
+playwright>=1.45
+anthropic>=0.34
+pydantic>=2.7
+python-dotenv>=1.0
+pytest>=8.0
