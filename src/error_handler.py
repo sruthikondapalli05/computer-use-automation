@@ -13,6 +13,11 @@ engine (and any caller escalating to a human) can react appropriately:
 - HardFailureError: retries exhausted or the situation can't be resolved
   automatically (element never appeared, navigation failed, checkpoint not
   met). This is what triggers human escalation.
+- SafetyViolation (src/safety.py): an action was rejected by the allowlist
+  or blocked-pattern rules. Never retried, never escalated for override --
+  fails closed by design.
+- HumanAbortedError (src/human_escalation.py): a human reviewing a
+  high-risk action chose to abort the run.
 """
 
 from enum import Enum
@@ -22,6 +27,8 @@ class ErrorCategory(str, Enum):
     EXPECTED_OUTCOME = "expected_outcome"
     RECOVERABLE = "recoverable"
     HARD_FAILURE = "hard_failure"
+    SAFETY_VIOLATION = "safety_violation"
+    HUMAN_ABORTED = "human_aborted"
 
 
 class ReplayError(Exception):
