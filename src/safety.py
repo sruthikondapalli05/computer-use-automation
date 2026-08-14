@@ -121,34 +121,46 @@ class SafetyManager:
 
     # --------------------------------------------------------- risk scoring
 
-    def _field_is_sensitive(self, locator: dict) -> bool:
+    def _get_locator_value(self, locator) -> str:
+        """Extract value from locator regardless of type (string, dict, or object)."""
+        if not locator:
+            return ""
+        if isinstance(locator, str):
+            return locator
+        if isinstance(locator, dict):
+            return locator.get("value", "")
+        return getattr(locator, "value", "")
+
+    def _field_is_sensitive(self, locator) -> bool:
         if not locator:
             return False
-        value = (locator.get("value") or "").lower()
+        value = self._get_locator_value(locator).lower()
         return any(f in value for f in self.sensitive_fields)
 
     def _has_risky_keyword(self, *texts: str) -> bool:
         joined = " ".join(t for t in texts if t).lower()
         return any(k in joined for k in RISKY_ACTION_KEYWORDS)
 
-    def categorize_risk(self, action: str, locator: dict = None, text_input: str = None) -> str:
+    def categorize_risk(self, action: str, locator = None, text_input: str = None) -> str:
         sensitive_text = self.contains_sensitive_data(text_input)
         sensitive_field = self._field_is_sensitive(locator)
 
         if action == "navigate":
-            target = text_input or (locator or {}).get("value") or ""
+            target = text_input or self._get_locator_value(locator) or ""
             if target and not self.is_url_allowed(target) and sensitive_text:
                 return "HIGH"
 
         if sensitive_field or sensitive_text:
             return "MEDIUM"
 
-        if self._has_risky_keyword((locator or {}).get("value"), (locator or {}).get("robustness_reason")):
+        locator_value = self._get_locator_value(locator)
+        locator_reason = (locator or {}).get("robustness_reason", "") if isinstance(locator, dict) else ""
+        if self._has_risky_keyword(locator_value, locator_reason):
             return "MEDIUM"
 
         return "LOW"
 
-    def score_action(self, action: str, locator: dict = None, text_input: str = None) -> int:
+    def score_action(self, action: str, locator = None, text_input: str = None) -> int:
         category = self.categorize_risk(action, locator, text_input)
         # MEDIUM is set so a bare sensitive-field-name match (e.g. a routine password
         # login field) stays under the review threshold, but any actual PII-shaped
@@ -159,11 +171,13 @@ class SafetyManager:
         score += 10 * len(self._pii_matches(text_input))
 
         if action == "navigate":
-            target = text_input or (locator or {}).get("value") or ""
+            target = text_input or self._get_locator_value(locator) or ""
             if target and not self.is_url_allowed(target):
                 score += 30
 
-        if self._has_risky_keyword((locator or {}).get("value"), (locator or {}).get("robustness_reason")):
+        locator_value = self._get_locator_value(locator)
+        locator_reason = (locator or {}).get("robustness_reason", "") if isinstance(locator, dict) else ""
+        if self._has_risky_keyword(locator_value, locator_reason):
             score += 20
 
         return min(score, 100)

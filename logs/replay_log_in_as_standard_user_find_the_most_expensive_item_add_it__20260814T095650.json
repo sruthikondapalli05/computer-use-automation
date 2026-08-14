@@ -1,0 +1,121 @@
+{
+  "result": {
+    "success": true,
+    "artifact_name": "log_in_as_standard_user_find_the_most_expensive_item_add_it_",
+    "steps_executed": 9,
+    "total_steps": 9,
+    "checkpoint_verified": true,
+    "outputs": {
+      "logged_in_user": "standard_user",
+      "most_expensive_item": "Sauce Labs Fleece Jacket",
+      "item_price": "$49.99",
+      "cart_page_url": "https://www.saucedemo.com/cart.html",
+      "cart_item_count": "1",
+      "step_6_read": "Sauce Labs Backpackcarry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.$29.99Add to cart",
+      "step_7_read": "Sauce Labs Backpackcarry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.$29.99Add to cartSauce Labs Bike LightA red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.$9.99Add to cartSauce Labs Bolt T-ShirtGet your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.$15.99Add to cartSauce Labs Fleece JacketIt's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.$49.99Add to cartSauce Labs OnesieRib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel.$7.99Add to cartTest.allTheThings() T-Shirt (Red)This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.$15.99Add to cart"
+    },
+    "error": null,
+    "duration_seconds": 1.12
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-14T09:56:49.228399",
+      "event": "run_start",
+      "artifact_name": "log_in_as_standard_user_find_the_most_expensive_item_add_it_",
+      "target_app": "https://www.saucedemo.com"
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.039016",
+      "event": "step_success",
+      "step_number": 1,
+      "action": "navigate",
+      "description": "Navigate to https://www.saucedemo.com",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.120487",
+      "event": "step_success",
+      "step_number": 2,
+      "action": "type",
+      "description": "Type username into Username field",
+      "attempt": 1,
+      "text_input": "standard_user"
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.159857",
+      "event": "step_success",
+      "step_number": 3,
+      "action": "type",
+      "description": "Type password into Password field",
+      "attempt": 1,
+      "text_input": "***REDACTED***"
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.219151",
+      "event": "step_success",
+      "step_number": 4,
+      "action": "click",
+      "description": "Click Login button",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.259612",
+      "event": "step_success",
+      "step_number": 5,
+      "action": "click",
+      "description": "Sort products by price high to low",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.262407",
+      "event": "step_success",
+      "step_number": 6,
+      "action": "read",
+      "description": "Read product prices to identify most expensive item",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.264347",
+      "event": "step_success",
+      "step_number": 7,
+      "action": "read",
+      "description": "Scroll down to see remaining products and prices",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.292281",
+      "event": "step_success",
+      "step_number": 8,
+      "action": "click",
+      "description": "Add Sauce Labs Fleece Jacket ($49.99, most expensive) to cart",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.326414",
+      "event": "step_success",
+      "step_number": 9,
+      "action": "click",
+      "description": "Click cart icon to go to cart page",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.328755",
+      "event": "checkpoint_verified",
+      "description": "Cart page shows the most expensive item 'Sauce Labs Fleece Jacket' added to the cart",
+      "actual": "Sauce Labs Fleece Jacket"
+    },
+    {
+      "timestamp": "2026-08-14T09:56:50.344337",
+      "event": "run_end",
+      "success": true,
+      "duration_seconds": 1.12
+    }
+  ]
+}

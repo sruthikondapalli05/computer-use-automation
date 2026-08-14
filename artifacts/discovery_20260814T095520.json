@@ -1,0 +1,126 @@
+{
+  "version": "1.0",
+  "name": "log_in_as_standard_user_find_the_most_expensive_item_add_it_",
+  "description": "Log in as standard_user, find the most expensive item, add it to cart, reach the cart page",
+  "target_app": "https://www.saucedemo.com",
+  "inputs": {
+    "username": "standard_user",
+    "password": "secret_sauce"
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "action": "navigate",
+      "locator": null,
+      "text_input": null,
+      "description": "Navigate to https://www.saucedemo.com"
+    },
+    {
+      "step_number": 2,
+      "action": "type",
+      "locator": {
+        "strategy": "id",
+        "value": "user-name",
+        "robustness_reason": "Standard input id used by saucedemo login form"
+      },
+      "text_input": "standard_user",
+      "description": "Type username into Username field"
+    },
+    {
+      "step_number": 3,
+      "action": "type",
+      "locator": {
+        "strategy": "id",
+        "value": "password",
+        "robustness_reason": "Standard input id used by saucedemo login form"
+      },
+      "text_input": "secret_sauce",
+      "description": "Type password into Password field"
+    },
+    {
+      "step_number": 4,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "login-button",
+        "robustness_reason": "Unique id for login button on saucedemo"
+      },
+      "text_input": null,
+      "description": "Click Login button"
+    },
+    {
+      "step_number": 5,
+      "action": "click",
+      "locator": {
+        "strategy": "css",
+        "value": "select.product_sort_container",
+        "robustness_reason": "Sort dropdown select element with stable class name on saucedemo"
+      },
+      "text_input": null,
+      "description": "Sort products by price high to low"
+    },
+    {
+      "step_number": 6,
+      "action": "read",
+      "locator": {
+        "strategy": "css",
+        "value": ".inventory_item",
+        "robustness_reason": "Container class for each inventory item, stable across saucedemo"
+      },
+      "text_input": null,
+      "description": "Read product prices to identify most expensive item"
+    },
+    {
+      "step_number": 7,
+      "action": "read",
+      "locator": {
+        "strategy": "css",
+        "value": ".inventory_list",
+        "robustness_reason": "Container for all inventory items, stable class name"
+      },
+      "text_input": null,
+      "description": "Scroll down to see remaining products and prices"
+    },
+    {
+      "step_number": 8,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "add-to-cart-sauce-labs-fleece-jacket",
+        "robustness_reason": "Saucedemo assigns unique ids to add-to-cart buttons based on product name, stable across sessions"
+      },
+      "text_input": null,
+      "description": "Add Sauce Labs Fleece Jacket ($49.99, most expensive) to cart"
+    },
+    {
+      "step_number": 9,
+      "action": "click",
+      "locator": {
+        "strategy": "css",
+        "value": ".shopping_cart_link",
+        "robustness_reason": "Standard class for cart link icon on saucedemo, stable across sessions"
+      },
+      "text_input": null,
+      "description": "Click cart icon to go to cart page"
+    }
+  ],
+  "checkpoint": {
+    "element_locator": {
+      "strategy": "css",
+      "value": ".cart_item .inventory_item_name",
+      "robustness_reason": "Stable class name for item name within cart page on saucedemo"
+    },
+    "expected_content": "Sauce Labs Fleece Jacket",
+    "description": "Cart page shows the most expensive item 'Sauce Labs Fleece Jacket' added to the cart"
+  },
+  "outputs": {
+    "logged_in_user": "standard_user",
+    "most_expensive_item": "Sauce Labs Fleece Jacket",
+    "item_price": "$49.99",
+    "cart_page_url": "https://www.saucedemo.com/cart.html",
+    "cart_item_count": "1"
+  },
+  "created_at": "2026-08-14T09:56:49.227446",
+  "created_by": "ai_discovery_run",
+  "estimated_duration_seconds": 89
+}

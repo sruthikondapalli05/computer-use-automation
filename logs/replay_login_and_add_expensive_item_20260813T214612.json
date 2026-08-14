@@ -1,0 +1,118 @@
+{
+  "result": {
+    "success": true,
+    "artifact_name": "login_and_add_expensive_item",
+    "steps_executed": 9,
+    "total_steps": 9,
+    "checkpoint_verified": true,
+    "outputs": {
+      "item_added": "true",
+      "item_name": "Sauce Labs Fleece Jacket",
+      "item_price": "$49.99",
+      "cart_item_count": "1"
+    },
+    "error": null,
+    "duration_seconds": 1.53
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-13T21:46:10.582559",
+      "event": "run_start",
+      "artifact_name": "login_and_add_expensive_item",
+      "target_app": "https://www.saucedemo.com"
+    },
+    {
+      "timestamp": "2026-08-13T21:46:11.735277",
+      "event": "step_success",
+      "step_number": 1,
+      "action": "navigate",
+      "description": "Navigate to Saucedemo",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:11.839107",
+      "event": "step_success",
+      "step_number": 2,
+      "action": "click",
+      "description": "Click username field",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:11.849266",
+      "event": "step_success",
+      "step_number": 3,
+      "action": "type",
+      "description": "Type username",
+      "attempt": 1,
+      "text_input": "standard_user"
+    },
+    {
+      "timestamp": "2026-08-13T21:46:11.917242",
+      "event": "step_success",
+      "step_number": 4,
+      "action": "click",
+      "description": "Click password field",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:11.921320",
+      "event": "step_success",
+      "step_number": 5,
+      "action": "type",
+      "description": "Type password",
+      "attempt": 1,
+      "text_input": "***REDACTED***"
+    },
+    {
+      "timestamp": "2026-08-13T21:46:11.994324",
+      "event": "step_success",
+      "step_number": 6,
+      "action": "click",
+      "description": "Click login button",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:12.019303",
+      "event": "step_success",
+      "step_number": 7,
+      "action": "click",
+      "description": "Click Fleece Jacket",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:12.050568",
+      "event": "step_success",
+      "step_number": 8,
+      "action": "click",
+      "description": "Click Add to cart",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:12.085424",
+      "event": "step_success",
+      "step_number": 9,
+      "action": "click",
+      "description": "Click cart icon",
+      "attempt": 1,
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-13T21:46:12.089976",
+      "event": "checkpoint_verified",
+      "description": "Verify 1 item in cart",
+      "actual": "1"
+    },
+    {
+      "timestamp": "2026-08-13T21:46:12.116203",
+      "event": "run_end",
+      "success": true,
+      "duration_seconds": 1.53
+    }
+  ]
+}

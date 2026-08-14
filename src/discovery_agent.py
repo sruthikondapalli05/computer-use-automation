@@ -283,7 +283,6 @@ class DiscoveryAgent:
         response = self.client.messages.create(
             model=self.model,
             max_tokens=1024,
-            temperature=0,
             system=SYSTEM_PROMPT,
             tools=[DECIDE_TOOL],
             tool_choice={"type": "tool", "name": "decide_next_action"},
@@ -365,7 +364,7 @@ class DiscoveryAgent:
                         break
                     messages.append({"role": "user", "content": [{
                         "type": "tool_result", "tool_use_id": tool_use_id, "is_error": True,
-                        "content": [{"type": "text", "text": f"Invalid decision: {validation_error}. Try again."}],
+                        "content": f"Invalid decision: {validation_error}. Try again.",
                     }]})
                     continue
 
@@ -453,14 +452,11 @@ class DiscoveryAgent:
                             "message": f"{exec_error['message']} (after {consecutive_failures} consecutive failed decisions)",
                         }
                         break
-                    screenshot = self._screenshot(page, step_number)
+                    self._screenshot(page, step_number)  # still saved to disk as evidence, just not attached to the error tool_result
                     messages.append({"role": "user", "content": [{
                         "type": "tool_result", "tool_use_id": tool_use_id, "is_error": True,
-                        "content": [
-                            {"type": "text", "text": f"Action failed ({exec_error['category']}): {exec_error['message']}. "
-                                                      f"Try a different locator or approach."},
-                            self._image_block(screenshot),
-                        ],
+                        "content": f"Action failed ({exec_error['category']}): {exec_error['message']}. "
+                                   f"Try a different locator or approach.",
                     }]})
 
             else:
