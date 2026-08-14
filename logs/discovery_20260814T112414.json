@@ -1,0 +1,163 @@
+{
+  "result": {
+    "success": true,
+    "goal": "Log in using the credentials shown on the page, then add the most expensive item to the cart.",
+    "target_url": "https://www.saucedemo.com",
+    "steps_taken": 7,
+    "error": null,
+    "duration_seconds": 38.49,
+    "screenshot_dir": "/Users/sruthikondapalli/computer-use-automation/computer-use-automation/logs/screenshots/20260814T112414",
+    "artifact_path": "/Users/sruthikondapalli/computer-use-automation/computer-use-automation/artifacts/discovery_20260814T112414.json",
+    "replay_verified": true,
+    "replay_result": {
+      "success": true,
+      "artifact_name": "log_in_using_the_credentials_shown_on_the_page_then_add_the_",
+      "steps_executed": 7,
+      "total_steps": 7,
+      "checkpoint_verified": true,
+      "outputs": {
+        "logged_in_user": "standard_user",
+        "most_expensive_item": "Sauce Labs Fleece Jacket",
+        "price": "$49.99",
+        "cart_count": "1",
+        "step_5_read": "Sauce Labs Backpackcarry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.$29.99Add to cart",
+        "step_6_read": "Sauce Labs Backpackcarry.allTheThings() with the sleek, streamlined Sly Pack that melds uncompromising style with unequaled laptop and tablet protection.$29.99Add to cartSauce Labs Bike LightA red light isn't the desired state in testing but it sure helps when riding your bike at night. Water-resistant with 3 lighting modes, 1 AAA battery included.$9.99Add to cartSauce Labs Bolt T-ShirtGet your testing superhero on with the Sauce Labs bolt T-shirt. From American Apparel, 100% ringspun combed cotton, heather gray with red bolt.$15.99Add to cartSauce Labs Fleece JacketIt's not every day that you come across a midweight quarter-zip fleece jacket capable of handling everything from a relaxing day outdoors to a busy day at the office.$49.99Add to cartSauce Labs OnesieRib snap infant onesie for the junior automation engineer in development. Reinforced 3-snap bottom closure, two-needle hemmed sleeved and bottom won't unravel.$7.99Add to cartTest.allTheThings() T-Shirt (Red)This classic Sauce Labs t-shirt is perfect to wear when cozying up to your keyboard to automate a few tests. Super-soft and comfy ringspun combed cotton.$15.99Add to cart"
+      },
+      "error": null,
+      "duration_seconds": 0.87
+    }
+  },
+  "events": [
+    {
+      "timestamp": "2026-08-14T11:24:14.275361",
+      "event": "run_start",
+      "goal": "Log in using the credentials shown on the page, then add the most expensive item to the cart.",
+      "target_url": "https://www.saucedemo.com",
+      "model": "claude-sonnet-5"
+    },
+    {
+      "timestamp": "2026-08-14T11:24:15.461688",
+      "event": "step_success",
+      "step_number": 1,
+      "action": "navigate",
+      "description": "Navigate to https://www.saucedemo.com"
+    },
+    {
+      "timestamp": "2026-08-14T11:24:19.889694",
+      "event": "risk_assessment",
+      "step_number": 2,
+      "action": "type",
+      "risk_category": "LOW",
+      "risk_score": 15
+    },
+    {
+      "timestamp": "2026-08-14T11:24:19.986799",
+      "event": "step_success",
+      "step_number": 2,
+      "action": "type",
+      "description": "Type username into Username field",
+      "text_input": "standard_user"
+    },
+    {
+      "timestamp": "2026-08-14T11:24:23.947470",
+      "event": "risk_assessment",
+      "step_number": 3,
+      "action": "type",
+      "risk_category": "MEDIUM",
+      "risk_score": 65
+    },
+    {
+      "timestamp": "2026-08-14T11:24:24.015850",
+      "event": "step_success",
+      "step_number": 3,
+      "action": "type",
+      "description": "Type password into Password field",
+      "text_input": "***REDACTED***"
+    },
+    {
+      "timestamp": "2026-08-14T11:24:27.612342",
+      "event": "risk_assessment",
+      "step_number": 4,
+      "action": "click",
+      "risk_category": "LOW",
+      "risk_score": 15
+    },
+    {
+      "timestamp": "2026-08-14T11:24:27.692724",
+      "event": "step_success",
+      "step_number": 4,
+      "action": "click",
+      "description": "Click Login button",
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T11:24:32.702480",
+      "event": "risk_assessment",
+      "step_number": 5,
+      "action": "read",
+      "risk_category": "LOW",
+      "risk_score": 15
+    },
+    {
+      "timestamp": "2026-08-14T11:24:32.715426",
+      "event": "step_success",
+      "step_number": 5,
+      "action": "read",
+      "description": "Scroll/read to see all products and prices to determine most expensive",
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T11:24:38.298651",
+      "event": "risk_assessment",
+      "step_number": 6,
+      "action": "read",
+      "risk_category": "LOW",
+      "risk_score": 15
+    },
+    {
+      "timestamp": "2026-08-14T11:24:38.309898",
+      "event": "step_success",
+      "step_number": 6,
+      "action": "read",
+      "description": "Read remaining product prices by scrolling down",
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T11:24:44.994520",
+      "event": "risk_assessment",
+      "step_number": 7,
+      "action": "click",
+      "risk_category": "LOW",
+      "risk_score": 15
+    },
+    {
+      "timestamp": "2026-08-14T11:24:45.030460",
+      "event": "step_success",
+      "step_number": 7,
+      "action": "click",
+      "description": "Add Sauce Labs Fleece Jacket ($49.99, most expensive) to cart",
+      "text_input": null
+    },
+    {
+      "timestamp": "2026-08-14T11:24:52.712988",
+      "event": "goal_reported_complete",
+      "reasoning": "Logged in successfully with standard_user/secret_sauce credentials shown on the page, and added the most expensive item (Sauce Labs Fleece Jacket, $49.99) to the cart, confirmed by the cart badge showing 1 and the button changing to 'Remove'."
+    },
+    {
+      "timestamp": "2026-08-14T11:24:52.765784",
+      "event": "artifact_saved",
+      "path": "/Users/sruthikondapalli/computer-use-automation/computer-use-automation/artifacts/discovery_20260814T112414.json"
+    },
+    {
+      "timestamp": "2026-08-14T11:24:53.638842",
+      "event": "replay_verification",
+      "verified": true
+    },
+    {
+      "timestamp": "2026-08-14T11:24:53.638845",
+      "event": "run_end",
+      "success": true,
+      "duration_seconds": 38.49
+    }
+  ]
+}

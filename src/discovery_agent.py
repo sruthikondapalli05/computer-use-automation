@@ -44,6 +44,17 @@ SENSITIVE_INPUT_KEYWORDS = ("password", "token", "secret", "pin", "ssn", "accoun
 MAX_ACTION_RETRIES = 2          # same-locator retries on a transient (recoverable) failure
 MAX_CONSECUTIVE_FAILURES = 3    # distinct Claude decisions that fail before giving up entirely
 
+def safe_locator_from_dict(locator_dict: dict) -> Locator:
+    """Safely construct a Locator from Claude's tool output, providing defaults for missing fields."""
+    if not locator_dict:
+        return None
+    # Ensure robustness_reason exists, provide default if Claude omitted it
+    return Locator(
+        strategy=locator_dict.get("strategy", "css"),
+        value=locator_dict.get("value", ""),
+        robustness_reason=locator_dict.get("robustness_reason", "Auto-generated locator (no reason provided by Claude)")
+    )
+
 DECIDE_TOOL = {
     "name": "decide_next_action",
     "description": (
@@ -428,7 +439,7 @@ class DiscoveryAgent:
                         step_number -= 1
                         break
 
-                    self._steps.append(Step(step_number, action, Locator(**locator) if locator else None, text_input, description))
+                    self._steps.append(Step(step_number, action, safe_locator_from_dict(locator), text_input, description))
                     self._log(
                         "step_success", step_number=step_number, action=action, description=description,
                         text_input=self._redact(text_input, is_sensitive),
@@ -528,7 +539,7 @@ class DiscoveryAgent:
             inputs=self._inputs,
             steps=self._steps,
             checkpoint=Checkpoint(
-                Locator(**checkpoint["locator"]),
+                safe_locator_from_dict(checkpoint.get("locator", {})),
                 checkpoint.get("expected_content"),
                 checkpoint["description"],
             ),

@@ -1,0 +1,103 @@
+{
+  "version": "1.0",
+  "name": "log_in_using_the_credentials_shown_on_the_page_then_add_the_",
+  "description": "Log in using the credentials shown on the page, then add the most expensive item to the cart.",
+  "target_app": "https://www.saucedemo.com",
+  "inputs": {
+    "username": "standard_user",
+    "password": "secret_sauce"
+  },
+  "steps": [
+    {
+      "step_number": 1,
+      "action": "navigate",
+      "locator": null,
+      "text_input": null,
+      "description": "Navigate to https://www.saucedemo.com"
+    },
+    {
+      "step_number": 2,
+      "action": "type",
+      "locator": {
+        "strategy": "id",
+        "value": "user-name",
+        "robustness_reason": "Standard saucedemo username field id"
+      },
+      "text_input": "standard_user",
+      "description": "Type username into Username field"
+    },
+    {
+      "step_number": 3,
+      "action": "type",
+      "locator": {
+        "strategy": "id",
+        "value": "password",
+        "robustness_reason": "Standard saucedemo password field id"
+      },
+      "text_input": "secret_sauce",
+      "description": "Type password into Password field"
+    },
+    {
+      "step_number": 4,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "login-button",
+        "robustness_reason": "Standard saucedemo login button id"
+      },
+      "text_input": null,
+      "description": "Click Login button"
+    },
+    {
+      "step_number": 5,
+      "action": "read",
+      "locator": {
+        "strategy": "css",
+        "value": ".inventory_item",
+        "robustness_reason": "Product items container"
+      },
+      "text_input": null,
+      "description": "Scroll/read to see all products and prices to determine most expensive"
+    },
+    {
+      "step_number": 6,
+      "action": "read",
+      "locator": {
+        "strategy": "css",
+        "value": ".inventory_list",
+        "robustness_reason": "Container listing all products"
+      },
+      "text_input": null,
+      "description": "Read remaining product prices by scrolling down"
+    },
+    {
+      "step_number": 7,
+      "action": "click",
+      "locator": {
+        "strategy": "id",
+        "value": "add-to-cart-sauce-labs-fleece-jacket",
+        "robustness_reason": "Saucedemo uses stable ids based on product name for add-to-cart buttons"
+      },
+      "text_input": null,
+      "description": "Add Sauce Labs Fleece Jacket ($49.99, most expensive) to cart"
+    }
+  ],
+  "checkpoint": {
+    "element_locator": {
+      "strategy": "css",
+      "value": ".shopping_cart_badge",
+      "robustness_reason": "The cart badge is a stable element that shows item count in the saucedemo app"
+    },
+    "expected_content": "1",
+    "description": "Cart badge shows 1 item after adding the most expensive product (Sauce Labs Fleece Jacket) to the cart"
+  },
+  "outputs": {
+    "logged_in_user": "standard_user",
+    "most_expensive_item": "Sauce Labs Fleece Jacket",
+    "price": "$49.99",
+    "cart_count": "1"
+  },
+  "created_at": "2026-08-14T11:24:52.765231",
+  "created_by": "ai_discovery_run",
+  "estimated_duration_seconds": 38
+}

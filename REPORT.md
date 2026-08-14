@@ -159,7 +159,44 @@ A JSON "recipe card" containing everything needed to replay a learned task:
 
 ---
 
-## 8. Limitations & Future Work
+## 8. Heterogeneity & Multi-Tenant Reuse
+
+**How can artifacts work across different contexts (users, accounts, environments)?**
+
+Artifacts are parameterized by design:
+
+1. **Inputs dictionary**: Instead of hardcoding "standard_user" into every step, the artifact's `inputs` field stores values by key: `{"username": "standard_user", "password": "secret_sauce"}`. When a step contains `text_input: "{{username}}"`, the Replay Engine substitutes the actual value from `inputs` at runtime.
+
+2. **Target app URL**: The artifact's `target_app` field is a single string, but a deployment could generate or override this at replay time. A discovery run learns a flow for Saucedemo, but the same artifact structure could be replayed against a staging vs. production URL by parameterizing `target_app`.
+
+3. **Locator stability across environments**: By prioritizing stable selectors (id > css > text > class), artifacts are more resilient to routine styling changes or layout shifts between environments. An `id="user-name"` selector survives a UI redesign; a deep XPath does not.
+
+4. **Multi-tenant scalability**: In a real deployment:
+   - Discover once per workflow template (e.g., "login and transfer funds")
+   - Record the artifact (versioned, immutable)
+   - Replay with different `inputs` (user A's credentials, user B's credentials) and optionally different `target_app` (staging, prod, regional instance)
+   - Each replay run is deterministic and auditable — no LLM variance between users
+
+5. **Safety inheritance**: The artifact itself carries no allowlist — safety is enforced at replay time by the caller, so a single artifact can be safely used in multiple trusted environments (e.g., internal testing + production customer operations) with different allowlists, without modifying the artifact.
+
+**Example deployment flow:**
+```
+Artifact (immutable): login_and_transfer_funds_v1.json
+  inputs: {username, password, account_number, amount}
+  steps: [...same steps work for any user...]
+  checkpoint: [...verify success in any environment...]
+
+Replay call 1: target_app="https://bank-staging.internal", inputs={username: "alice", ...}
+Replay call 2: target_app="https://bank-prod.company.com", inputs={username: "bob", ...}
+Replay call 3: target_app="https://bank-staging.internal", inputs={username: "alice", ...}
+  (same inputs/target, so deterministic replay — bit-for-bit identical step execution)
+```
+
+This design keeps the discovery/artifact layer agnostic to multi-tenant concerns while allowing replay to be parameterized for different contexts.
+
+---
+
+## 9. Limitations & Future Work
 
 **What we didn't build (scope cuts):**
 
@@ -179,7 +216,7 @@ A JSON "recipe card" containing everything needed to replay a learned task:
 
 ---
 
-## 9. Conclusion
+## 10. Conclusion
 
 This system demonstrates a working pipeline: **Learn (Discovery) → Record (Artifact) → Verify (Replay) → Govern (Safety) → Escalate (Human)**.
 
