@@ -49,7 +49,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python -m playwright install chromium
 
-# 4. Run the tests (no API key needed — 26 pass, 1 skips)
+# 4. Run the tests (46 pass, 1 skips without an API key; all 47 pass with one)
 pytest src/ -v
 
 # 5. Run the replay example (deterministic, no LLM, no API key)
@@ -79,12 +79,16 @@ src/
   safety.py               allowlist, redaction, risk scoring
   human_escalation.py     pause-for-human, audit trail, handoff state
   error_handler.py        shared error taxonomy
-  test_*.py               26 tests, all passing (no API key needed)
+  test_*.py               47 tests (46 need no API key; 1 live discovery test skips without one)
 artifacts/
   saucedemo_login_and_add_to_cart_v1.json   hand-authored example
+  discovery_<TIMESTAMP>.json                learned by the discovery agent, auto-verified by replay
 logs/
-  replay_*.json            evidence of successful/failed runs
+  replay_*.json            evidence of successful/failed runs (regenerated on every run)
   escalations_*.json       audit trail of human decisions
+evidence/
+  discovery/               a curated real discovery run (genuine Claude API call, not mocked)
+  replay/                  curated replay runs: one success, one deliberate failure
 REPORT.md                  full architecture & design write-up
 ```
 
@@ -98,12 +102,12 @@ REPORT.md                  full architecture & design write-up
 - ✅ Risk scoring — 0–100, actions scoring above 70 escalate to a human
 - ✅ Human-in-the-loop — approve / modify / abort high-risk actions, every decision audited
 - ✅ Auto-replay verification — a discovered task isn't "done" until it replays deterministically
-- ✅ Comprehensive testing — 26 tests, none requiring an API key
+- ✅ Comprehensive testing — 47 tests; only one (a live discovery-agent run) requires an API key, and skips cleanly without one
 
 ## Testing
 
 ```bash
-pytest src/ -v                    # everything (26 pass, 1 skips without ANTHROPIC_API_KEY)
+pytest src/ -v                    # everything (46 pass + 1 skip without ANTHROPIC_API_KEY, 47 pass with one)
 pytest src/test_replay.py -v      # replay engine, live against Saucedemo
 pytest src/test_safety.py -v      # allowlist, redaction, risk scoring, escalation
 pytest src/test_discovery.py -v   # full discovery loop (needs ANTHROPIC_API_KEY)
@@ -111,15 +115,20 @@ pytest src/test_discovery.py -v   # full discovery loop (needs ANTHROPIC_API_KEY
 
 ## Evidence
 
-- `logs/replay_login_and_add_expensive_item_20260813T192318.json` — successful 9-step replay, checkpoint verified
-- `logs/replay_broken_test_20260813T192933.json` — deliberate broken locator: 3 attempts, then a clean hard failure
+- `evidence/discovery/` — a genuine discovery run: a real Claude API call against live Saucedemo, auto-verified by replay before being saved
+- `evidence/replay/replay_login_and_add_expensive_item_20260813T192318.json` — successful 9-step replay, checkpoint verified
+- `evidence/replay/replay_broken_test_20260813T192933.json` — deliberate broken locator: 3 attempts, then a clean hard failure
+- `logs/` and `artifacts/` also accumulate a full run of these on every `pytest`/CLI invocation — `evidence/` is the curated, stable subset kept for review
 - `REPORT.md` — full architecture, design rationale, and known limitations
 
 ## For Interface AI Reviewers
 
 1. Start with [REPORT.md](REPORT.md) for architecture and design rationale.
-2. Run `pytest src/ -v` to see all 26 tests pass without any API key.
-3. Check `logs/` for evidence of deterministic replay, including an intentional failure case.
+2. Run `pytest src/ -v` — 46 of 47 tests pass without any API key; the one exception (a live
+   discovery-agent run against the real Claude API) skips cleanly rather than failing.
+3. Check `evidence/` for a curated discovery run and two replay runs (one success, one
+   intentional failure); `logs/` and `artifacts/` hold the same kind of evidence but regenerate
+   on every run.
 4. Inspect `src/safety.py` and `src/human_escalation.py` for the allowlist, redaction, and
    human-in-the-loop mechanisms — in particular, note that allowlist violations are
    non-overridable while risk escalations are, which is what keeps the safety boundary from

@@ -163,36 +163,69 @@ A JSON "recipe card" containing everything needed to replay a learned task:
 
 **How can artifacts work across different contexts (users, accounts, environments)?**
 
-Artifacts are parameterized by design:
+**Implemented — parameterized replay via `{{key}}` substitution.** A step's `text_input` can be a
+placeholder like `"{{username}}"` instead of a literal value. `ReplayEngine.run(inputs=None)`
+merges the caller-supplied `inputs` dict over the artifact's own baked-in `inputs`, then resolves
+every `{{key}}` placeholder against the merged result immediately before each step executes:
 
-1. **Inputs dictionary**: Instead of hardcoding "standard_user" into every step, the artifact's `inputs` field stores values by key: `{"username": "standard_user", "password": "secret_sauce"}`. When a step contains `text_input: "{{username}}"`, the Replay Engine substitutes the actual value from `inputs` at runtime.
-
-2. **Target app URL**: The artifact's `target_app` field is a single string, but a deployment could generate or override this at replay time. A discovery run learns a flow for Saucedemo, but the same artifact structure could be replayed against a staging vs. production URL by parameterizing `target_app`.
-
-3. **Locator stability across environments**: By prioritizing stable selectors (id > css > text > class), artifacts are more resilient to routine styling changes or layout shifts between environments. An `id="user-name"` selector survives a UI redesign; a deep XPath does not.
-
-4. **Multi-tenant scalability**: In a real deployment:
-   - Discover once per workflow template (e.g., "login and transfer funds")
-   - Record the artifact (versioned, immutable)
-   - Replay with different `inputs` (user A's credentials, user B's credentials) and optionally different `target_app` (staging, prod, regional instance)
-   - Each replay run is deterministic and auditable — no LLM variance between users
-
-5. **Safety inheritance**: The artifact itself carries no allowlist — safety is enforced at replay time by the caller, so a single artifact can be safely used in multiple trusted environments (e.g., internal testing + production customer operations) with different allowlists, without modifying the artifact.
-
-**Example deployment flow:**
+```python
+engine = ReplayEngine("artifacts/login_and_transfer_funds_v1.json")
+engine.run(inputs={"username": "bob", "password": "..."})
 ```
-Artifact (immutable): login_and_transfer_funds_v1.json
-  inputs: {username, password, account_number, amount}
-  steps: [...same steps work for any user...]
-  checkpoint: [...verify success in any environment...]
-
-Replay call 1: target_app="https://bank-staging.internal", inputs={username: "alice", ...}
-Replay call 2: target_app="https://bank-prod.company.com", inputs={username: "bob", ...}
-Replay call 3: target_app="https://bank-staging.internal", inputs={username: "alice", ...}
-  (same inputs/target, so deterministic replay — bit-for-bit identical step execution)
+```bash
+python src/replay_engine.py artifacts/login_and_transfer_funds_v1.json \
+  --inputs '{"username": "bob", "password": "..."}'
 ```
 
-This design keeps the discovery/artifact layer agnostic to multi-tenant concerns while allowing replay to be parameterized for different contexts.
+One recorded artifact can therefore serve multiple tenants/users without re-discovering it. A
+placeholder key missing from `inputs` (or explicitly `None`) raises a `HardFailureError` naming
+the missing key(s) *before* anything is typed — substitution never silently falls back to typing
+the literal `{{key}}` text or an empty string, so a missing/misspelled parameter can't quietly
+produce a "successful" replay that actually submitted garbage. Substitution itself is a single
+pass over the original text (`re.sub` with a callback, not one `str.replace()` per key chained
+over the growing result) specifically so that one input's value containing `{{other_key}}`-shaped
+text can't get re-substituted on a later pass and leak into a different field. Redaction runs on
+the *resolved* value, not the placeholder — `{{password}}` isn't sensitive text on its own, but
+what it resolves to is — while the original template is preserved in the log
+(`text_input_template`) so the evidence trail shows both what was recorded and what
+actually ran. Verified with a negative control: replaying a templated artifact with a deliberately
+wrong `{{password}}` value fails at the expected step, confirming substitution — not a silent
+fallback to the artifact's own baked-in credentials — is what's actually happening.
+
+**Locator stability across environments**: By prioritizing stable selectors (id > css > text >
+class), artifacts are more resilient to routine styling changes or layout shifts between
+environments. An `id="user-name"` selector survives a UI redesign; a deep XPath does not.
+
+**Safety inheritance**: The artifact itself carries no allowlist — safety is enforced at replay
+time by the caller, so a single artifact can be safely used in multiple trusted environments
+(e.g., internal testing + production customer operations) with different allowlists, without
+modifying the artifact.
+
+**Design, not built — everything else below.** These are the honest next steps, not implemented:
+
+- **Target app override.** `target_app` is currently a fixed field read once at artifact-save
+  time; replaying the same artifact against a staging vs. production URL for the same app would
+  need `ReplayEngine` to accept a `target_app` override the same way `inputs` now does. Small,
+  same-shaped change — not done because no second environment exists to test it against.
+- **Cross-tenant drift detection.** Two tenants running the same vendor product rarely have
+  byte-identical DOMs (different branding, a moved button, an extra confirmation step). Nothing
+  here detects when a locator that worked for tenant A silently stops matching on tenant B's
+  variant — today that just surfaces as an ordinary replay failure, indistinguishable from the
+  artifact having gone stale for everyone. A real version would track per-locator success rates
+  per tenant and flag when one tenant's failure rate diverges from the rest.
+- **Canonicalization of per-tenant overrides.** Rather than one artifact per tenant, a base
+  artifact plus a small per-tenant override map (a handful of locators that differ, not a full
+  re-record) is the shape that would actually scale to hundreds of tenants on ~20 shared apps —
+  described here, not built.
+- **Surface abstraction beyond the browser.** `_resolve_locator()` in both `replay_engine.py` and
+  `discovery_agent.py` is Playwright-specific (CSS/id/xpath/text selectors against a DOM). The
+  seam that would need to exist for a legacy frameset app or a desktop app is the same one that
+  exists today between "how a step's `locator` is interpreted" and "the rest of the artifact
+  schema" — `Step`, `Checkpoint`, and the error taxonomy don't know or care that Playwright is
+  what's underneath. A desktop surface would implement the same `_resolve_locator` /
+  `_execute_action_once` contract against an accessibility-tree API (e.g. pywinauto, AXUIElement)
+  instead of a `Page`, with `Locator.strategy` gaining values like `automation_id` or
+  `accessibility_label`. Nothing in the artifact schema itself is web-specific.
 
 ---
 
